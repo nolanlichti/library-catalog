@@ -24,32 +24,32 @@ public class PatronController {
     }
 
     @GetMapping("/patrons/{id}")
-    public Patron getPatron(@PathVariable String id) {
+    public Patron getPatron(@PathVariable Integer id) {
         return patronRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/books")
-    @PutMapping("/books")
+    @PostMapping("/patrons")
+    @PutMapping("/patrons")
     public Patron savePatron(@RequestBody Patron patron) {
         return patronRepository.save(patron);
     }
 
-    @DeleteMapping("/books/{id}")
-    public void deletePatron(@PathVariable String id) {
+    @DeleteMapping("/patrons/{id}")
+    public void deletePatron(@PathVariable Integer id) {
         patronRepository.deleteById(id);
     }
 
     @GetMapping("/patrons/{id}/checkout/{bookId}")
-    public String checkoutBook(@PathVariable String id, @PathVariable String bookId) {
+    public String checkoutBook(@PathVariable Integer id, @PathVariable Integer bookId) {
         var patron = patronRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Patron not found"));
         var book = bookRepository.findById(bookId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Book not found"));
-        var dueDate = patron.checkOutItem(book);
+        var dueDate = patron.checkOutItem(book, bookRepository);
         patronRepository.save(patron);
         return dueDate;
     }
 
     @GetMapping("/patrons/{id}/return/{bookId}")
-    public double returnBook(@PathVariable String id, @PathVariable String bookId) {
+    public double returnBook(@PathVariable Integer id, @PathVariable Integer bookId) {
         var patron = patronRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Patron not found"));
         var book = bookRepository.findById(bookId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Book not found"));
         var fines = patron.returnItem(book);

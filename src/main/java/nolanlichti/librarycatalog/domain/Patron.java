@@ -1,23 +1,27 @@
 package nolanlichti.librarycatalog.domain;
 
+import nolanlichti.librarycatalog.repositories.BookRepository;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 public class Patron {
     @Id
-    private String id;
+    @GeneratedValue
+    private Integer id;
     private String firstName;
     private String lastName;
     private String checkedOutItems;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -45,15 +49,19 @@ public class Patron {
         this.checkedOutItems = checkedOutItems;
     }
 
-    public String checkOutItem(LendableItem item) {
+    public String checkOutItem(LendableItem item, BookRepository bookRepository) {
         this.checkedOutItems = this.checkedOutItems + "," + item.getId();
-        return item.checkout();
+        var dueDate = item.checkout();
+        if (item instanceof Book) {
+            bookRepository.save((Book) item);
+        }
+        return dueDate;
     }
 
     public double returnItem(LendableItem item) {
-        var itemIds = List.of(this.checkedOutItems.split(","));
+        var itemIds = new ArrayList<>(List.of(this.checkedOutItems.split(",")));
 
-        if (itemIds.remove(item.getId())) {
+        if (itemIds.remove(item.getId().toString())) {
             this.checkedOutItems = String.join(",", itemIds);
             return item.returnItem();
         }

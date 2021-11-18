@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PatronRepository extends CrudRepository<Patron, String> {
+public interface PatronRepository extends CrudRepository<Patron, Integer> {
 }

@@ -1,27 +1,15 @@
 package nolanlichti.librarycatalog.domain;
 
-import javax.persistence.Id;
-import java.util.List;
+import javax.persistence.Entity;
 
+@Entity
 public class Book extends LendableItem {
-    @Id
-    private String id;
     private String title;
     private String authorFirstName;
     private String authorLastName;
     private String copyrightYear;
     private String publisher;
     private String category;
-    private List<String> genre;
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -69,14 +57,6 @@ public class Book extends LendableItem {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public List<String> getGenre() {
-        return genre;
-    }
-
-    public void setGenre(List<String> genre) {
-        this.genre = genre;
     }
 
     @Override

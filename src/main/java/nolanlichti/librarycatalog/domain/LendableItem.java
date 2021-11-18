@@ -1,17 +1,38 @@
 package nolanlichti.librarycatalog.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+@Entity
 public abstract class LendableItem {
+    @Id
+    @GeneratedValue
+    private Integer id;
     private String checkoutDate;
-
-    public abstract String getId();
 
     public abstract int daysUntilDue();
 
     public abstract double overdueChargePerDay();
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getCheckoutDate() {
+        return checkoutDate;
+    }
+
+    public void setCheckoutDate(String checkoutDate) {
+        this.checkoutDate = checkoutDate;
+    }
 
     /**
      * Checks out the lendable item, setting the checkout date to today
